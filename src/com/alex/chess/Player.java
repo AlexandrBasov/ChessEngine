@@ -1,4 +1,7 @@
-package com.alex;
+package com.alex.chess;
+
+import com.alex.chess.enums.Color;
+import com.alex.chess.pieces.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +18,16 @@ public abstract class Player implements MoveEngine {
         this.pieces = new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
-            pieces.add(new Piece(PieceName.PAWN, color));
+            pieces.add(new Pawn(color));
         }
-        pieces.add(new Piece(PieceName.KING, color));
-        pieces.add(new Piece(PieceName.QUEEN, color));
-        pieces.add(new Piece(PieceName.BISHOP, color));
-        pieces.add(new Piece(PieceName.BISHOP, color));
-        pieces.add(new Piece(PieceName.KNIGHT, color));
-        pieces.add(new Piece(PieceName.KNIGHT, color));
-        pieces.add(new Piece(PieceName.ROOK, color));
-        pieces.add(new Piece(PieceName.ROOK, color));
+        pieces.add(new King(color));
+        pieces.add(new Queen(color));
+        pieces.add(new Bishop(color));
+        pieces.add(new Bishop(color));
+        pieces.add(new King(color));
+        pieces.add(new King(color));
+        pieces.add(new Rook(color));
+        pieces.add(new Rook(color));
     }
 
     public void putPiecesOnTheBoard(Board board) {

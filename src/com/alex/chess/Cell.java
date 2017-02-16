@@ -1,4 +1,7 @@
-package com.alex;
+package com.alex.chess;
+
+import com.alex.chess.enums.Color;
+import com.alex.chess.pieces.Piece;
 
 public class Cell {
 
@@ -6,9 +9,12 @@ public class Cell {
 
     private Piece piece;
 
-    public Cell(Color color, Piece piece) {
+    private Coord coordinates;
+
+    public Cell(Color color, Piece piece, Coord coordinates) {
         this.cellColor = color;
         this.piece = piece;
+        this.coordinates = coordinates;
     }
 
     public Color getCellColor() {
@@ -29,6 +35,11 @@ public class Cell {
 
     public void setPiece(Piece piece) {
         this.piece = piece;
+        this.piece.setCoordinates(getCoordinates());
+    }
+
+    public Coord getCoordinates() {
+        return coordinates;
     }
 
     @Override
@@ -37,8 +48,7 @@ public class Cell {
         StringBuilder stringBuilder = new StringBuilder("");
 
         if (null != getPiece()) {
-            stringBuilder.append(Color.WHITE.equals(getPiece().getPieceColor()) ? getPiece().getPieceName().getShortName().toUpperCase() :
-                    getPiece().getPieceName().getShortName().toLowerCase());
+            stringBuilder.append(getPiece());
         } else {
             stringBuilder.append(" ");
         }
