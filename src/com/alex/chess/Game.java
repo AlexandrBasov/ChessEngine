@@ -17,6 +17,8 @@ public class Game {
 
         this.player_1 = new HumanPlayer(color);
 
+        this.player_1.setCurrent(true);
+
         if (multiplayer) {
             player_2 = new HumanPlayer(color.opposite());
         } else {
@@ -81,15 +83,23 @@ public class Game {
         System.out.println("|");
     }
 
-    public MoveEngine getPlayer_1() {
+    public Player getPlayer_1() {
         return player_1;
     }
 
-    public MoveEngine getPlayer_2() {
+    public Player getPlayer_2() {
         return player_2;
     }
 
     public Board getBoard() {
         return board;
+    }
+
+    public Player getCurrentPlayer(){
+        if(getPlayer_1().isCurrent()){
+            return getPlayer_1();
+        } else {
+            return getPlayer_2();
+        }
     }
 }

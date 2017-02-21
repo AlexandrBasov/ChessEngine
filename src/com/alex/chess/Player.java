@@ -14,6 +14,8 @@ public abstract class Player implements MoveEngine {
 
     protected List<Piece> brokePieces;
 
+    protected boolean current;
+
     public Player(Color color) {
         this.pieces = new ArrayList<>();
 
@@ -106,5 +108,13 @@ public abstract class Player implements MoveEngine {
 
     public void setCanPlay(boolean canPlay) {
         this.canPlay = canPlay;
+    }
+
+    public boolean isCurrent() {
+        return current;
+    }
+
+    public void setCurrent(boolean current) {
+        this.current = current;
     }
 }

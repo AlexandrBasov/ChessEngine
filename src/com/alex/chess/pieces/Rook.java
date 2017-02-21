@@ -1,9 +1,12 @@
 package com.alex.chess.pieces;
 
 import com.alex.chess.Board;
+import com.alex.chess.Cell;
 import com.alex.chess.enums.Color;
 import com.alex.chess.enums.PieceName;
 import com.alex.chess.enums.UnicodeView;
+
+import java.util.List;
 
 public class Rook extends Piece{
 
@@ -12,7 +15,7 @@ public class Rook extends Piece{
     private UnicodeView unicodeRepresentation;
 
     public Rook(Color pieceColor) {
-        super(pieceColor);
+        super(pieceColor, PieceName.ROOK);
         if (Color.WHITE.equals(pieceColor)) {
             unicodeRepresentation = UnicodeView.WHITE_ROOK;
         } else {
@@ -21,7 +24,7 @@ public class Rook extends Piece{
     }
 
     @Override
-    public String getPossibleMoves(Board board) {
+    public List<Cell> getPossibleMoves(Board board) {
         return "";
     }
 

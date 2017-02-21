@@ -11,6 +11,8 @@ public class Cell {
 
     private Coord coordinates;
 
+    private boolean isOccupied;
+
     public Cell(Color color, Piece piece, Coord coordinates) {
         this.cellColor = color;
         this.piece = piece;
