@@ -36,7 +36,7 @@ public class King extends Piece {
         int currentRow = ROW_TO_INDEX.get(getCoordinates().getRow());
         int currentCol = COLUMN_TO_INDEX.get(getCoordinates().getCol());
 
-
+        return attackedByBishopOrRookOrQueen(board, currentRow, currentCol);
     }
 
     private boolean attackedByBishopOrRookOrQueen(Board board, int currentRow, int currentCol) {
