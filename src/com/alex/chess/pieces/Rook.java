@@ -2,6 +2,7 @@ package com.alex.chess.pieces;
 
 import com.alex.chess.Board;
 import com.alex.chess.Cell;
+import com.alex.chess.Player;
 import com.alex.chess.enums.Color;
 import com.alex.chess.enums.PieceName;
 import com.alex.chess.enums.UnicodeView;
@@ -24,8 +25,8 @@ public class Rook extends Piece{
     }
 
     @Override
-    public List<Cell> getPossibleMoves(Board board) {
-        return "";
+    public List<Cell> getPossibleMoves(Board board, Player currentPlayer) {
+        return null;
     }
 
     public PieceName getName() {

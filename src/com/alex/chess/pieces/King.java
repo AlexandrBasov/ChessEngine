@@ -36,25 +36,31 @@ public class King extends Piece {
         int currentRow = ROW_TO_INDEX.get(getCoordinates().getRow());
         int currentCol = COLUMN_TO_INDEX.get(getCoordinates().getCol());
 
+
+    }
+
+    private boolean attackedByBishopOrRookOrQueen(Board board, int currentRow, int currentCol) {
         int tempRow;
         int tempCol;
 
-        for (int i = -1; i <= 1; i += 2) {
-            for (int j = -1; j <= 1; j += 2) {
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
                 tempRow = currentRow + i;
                 tempCol = currentCol + j;
                 while (tempRow >= 0 || tempRow < 8 || tempCol >= 0 || tempCol < 8) {
-                    if (!board.getState()[tempRow][tempCol].isEmpty()){
+                    if (!board.getState()[tempRow][tempCol].isEmpty()) {
                         Piece enemy = board.getState()[tempRow][tempCol].getPiece();
-                        if(getPieceColor().equals(enemy.getPieceColor())){
+                        if (getPieceColor().equals(enemy.getPieceColor())) {
                             break;
                         } else {
                             PieceName pieceName = enemy.getName();
-                            if(BISHOP.equals(pieceName) || QUEEN.equals(pieceName)) {
+                            if (BISHOP.equals(pieceName) || QUEEN.equals(pieceName) || ROOK.equals(pieceName)) {
                                 return true;
                             }
                         }
                     }
+                    tempRow++;
+                    tempCol++;
                 }
             }
         }

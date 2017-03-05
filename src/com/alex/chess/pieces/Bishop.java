@@ -60,10 +60,6 @@ public class Bishop extends Piece {
         return false;
     }
 
-    public PieceName getName() {
-        return name;
-    }
-
     public UnicodeView getUnicodeRepresentation() {
         return unicodeRepresentation;
     }
