@@ -6,6 +6,8 @@ import com.alex.chess.pieces.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.alex.chess.util.MapCoordinates.*;
+
 public abstract class Player implements MoveEngine {
 
     protected boolean canPlay;
@@ -92,6 +94,24 @@ public abstract class Player implements MoveEngine {
 
         state[cell_one / 8][cell_one % 8].setPiece(rookOne);
         state[cell_two / 8][cell_two % 8].setPiece(rookTwo);
+    }
+
+    @Override
+    public void makeMove(Board board, Move move) {
+        Piece piece = move.getPiece();
+        Coord from = move.getFrom();
+        Coord to = move.getTo();
+        board.getState()[ROW_TO_INDEX.get(from.getRow())][COLUMN_TO_INDEX.get(from.getRow())].setPiece(null);
+        board.getState()[ROW_TO_INDEX.get(to.getRow())][COLUMN_TO_INDEX.get(to.getRow())].setPiece(piece);
+    }
+
+    @Override
+    public void undoMove(Board board, Move move) {
+        Piece piece = move.getPiece();
+        Coord from = move.getFrom();
+        Coord to = move.getTo();
+        board.getState()[ROW_TO_INDEX.get(from.getRow())][COLUMN_TO_INDEX.get(from.getRow())].setPiece(piece);
+        board.getState()[ROW_TO_INDEX.get(to.getRow())][COLUMN_TO_INDEX.get(to.getRow())].setPiece(null);
     }
 
     public List<Piece> getPieces() {

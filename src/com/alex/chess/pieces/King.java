@@ -1,17 +1,15 @@
 package com.alex.chess.pieces;
 
-import com.alex.chess.Board;
-import com.alex.chess.Cell;
-import com.alex.chess.Player;
+import com.alex.chess.*;
 import com.alex.chess.enums.Color;
 import com.alex.chess.enums.PieceName;
 import com.alex.chess.enums.UnicodeView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.alex.chess.enums.PieceName.*;
-import static com.alex.chess.util.MapCoordinates.COLUMN_TO_INDEX;
-import static com.alex.chess.util.MapCoordinates.ROW_TO_INDEX;
+import static com.alex.chess.util.MapCoordinates.*;
 
 public class King extends Piece {
 
@@ -27,8 +25,43 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Cell> getPossibleMoves(Board board, Player currentPlayer) {
-        return null;
+    public List<Move> getPossibleMoves(Board board, Player currentPlayer) {
+        List<Move> possibleMoves = new ArrayList<>();
+        Move move;
+        int currentRow = ROW_TO_INDEX.get(getCoordinates().getRow());
+        int currentCol = COLUMN_TO_INDEX.get(getCoordinates().getCol());
+        int tempRow;
+        int tempCol;
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                tempRow = currentRow + i;
+                tempCol = currentCol + j;
+                Cell cell = board.getState()[tempRow][tempCol];
+                if (cell.isEmpty()) {
+                    move = new Move(this, getCoordinates(),
+                            new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)));
+                    currentPlayer.makeMove(board, move);
+                    if (!this.isAttacked(board)) {
+                        possibleMoves.add(move);
+                    }
+                    currentPlayer.undoMove(board, move);
+                } else {
+                    Piece enemy = board.getState()[tempRow][tempCol].getPiece();
+                    if (getPieceColor().equals(enemy.getPieceColor())) {
+                        break;
+                    } else {
+                        move = new Move(this, getCoordinates(),
+                                new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)));
+                        currentPlayer.makeMove(board, move);
+                        if (!this.isAttacked(board)) {
+                            possibleMoves.add(move);
+                        }
+                        currentPlayer.undoMove(board, move);
+                    }
+                }
+            }
+        }
+        return possibleMoves;
     }
 
     public boolean isAttacked(Board board) {
@@ -36,7 +69,92 @@ public class King extends Piece {
         int currentRow = ROW_TO_INDEX.get(getCoordinates().getRow());
         int currentCol = COLUMN_TO_INDEX.get(getCoordinates().getCol());
 
-        return attackedByBishopOrRookOrQueen(board, currentRow, currentCol);
+        return
+                attackedByBishopOrRookOrQueen(board, currentRow, currentCol) ||
+                        attackedByPawn(board, currentRow, currentCol) ||
+                        attackedByKnight(board, currentRow, currentCol) ||
+                        attackedByKing(board, currentRow, currentCol);
+    }
+
+    private boolean attackedByKing(Board board, int currentRow, int currentCol) {
+        int tempRow;
+        int tempCol;
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                tempRow = currentRow + i;
+                tempCol = currentCol + j;
+                if (!board.getState()[tempRow][tempCol].isEmpty()) {
+                    Piece enemy = board.getState()[tempRow][tempCol].getPiece();
+                    if (getPieceColor().equals(enemy.getPieceColor())) {
+                        break;
+                    } else {
+                        PieceName pieceName = enemy.getName();
+                        if (KING.equals(pieceName)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean attackedByKnight(Board board, int currentRow, int currentCol) {
+
+        int[][] offsets = {
+                {-2, 1},
+                {-1, 2},
+                {1, 2},
+                {2, 1},
+                {2, -1},
+                {1, -2},
+                {-1, -2},
+                {-2, -1}
+        };
+
+        int tempRow;
+        int tempCol;
+
+        for (int[] offset : offsets) {
+            tempRow = currentRow + offset[0];
+            tempCol = currentCol + offset[1];
+            if (!board.getState()[tempRow][tempCol].isEmpty()) {
+                Piece enemy = board.getState()[tempRow][tempCol].getPiece();
+                if (getPieceColor().equals(enemy.getPieceColor())) {
+                    break;
+                } else {
+                    PieceName pieceName = enemy.getName();
+                    if (KNIGHT.equals(pieceName)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean attackedByPawn(Board board, int currentRow, int currentCol) {
+        int tempRow;
+        int tempCol;
+
+        for (int i = -1; i <= 1; i += 2) {
+            tempRow = currentRow - 1;
+            tempCol = currentCol + i;
+            if (!board.getState()[tempRow][tempCol].isEmpty()) {
+                Piece enemy = board.getState()[tempRow][tempCol].getPiece();
+                if (getPieceColor().equals(enemy.getPieceColor())) {
+                    break;
+                } else {
+                    PieceName pieceName = enemy.getName();
+                    if (PAWN.equals(pieceName)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private boolean attackedByBishopOrRookOrQueen(Board board, int currentRow, int currentCol) {

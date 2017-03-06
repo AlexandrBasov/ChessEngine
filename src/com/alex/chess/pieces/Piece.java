@@ -1,9 +1,6 @@
 package com.alex.chess.pieces;
 
-import com.alex.chess.Board;
-import com.alex.chess.Cell;
-import com.alex.chess.Coord;
-import com.alex.chess.Player;
+import com.alex.chess.*;
 import com.alex.chess.enums.Color;
 import com.alex.chess.enums.PieceName;
 
@@ -26,7 +23,7 @@ public abstract class Piece {
         return pieceColor;
     }
 
-    public abstract List<Cell> getPossibleMoves(Board board, Player currentPlayer);
+    public abstract List<Move> getPossibleMoves(Board board, Player currentPlayer);
 
     public Coord getCoordinates() {
         return coordinates;
