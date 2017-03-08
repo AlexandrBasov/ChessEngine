@@ -36,20 +36,9 @@ public class King extends Piece {
             for (int j = -1; j <= 1; j++) {
                 tempRow = currentRow + i;
                 tempCol = currentCol + j;
-                Cell cell = board.getState()[tempRow][tempCol];
-                if (cell.isEmpty()) {
-                    move = new Move(this, getCoordinates(),
-                            new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)));
-                    currentPlayer.makeMove(board, move);
-                    if (!this.isAttacked(board)) {
-                        possibleMoves.add(move);
-                    }
-                    currentPlayer.undoMove(board, move);
-                } else {
-                    Piece enemy = board.getState()[tempRow][tempCol].getPiece();
-                    if (getPieceColor().equals(enemy.getPieceColor())) {
-                        break;
-                    } else {
+                if (tempRow >= 0 && tempRow < 8 && tempCol >= 0 && tempCol < 8) {
+                    Cell cell = board.getState()[tempRow][tempCol];
+                    if (cell.isEmpty()) {
                         move = new Move(this, getCoordinates(),
                                 new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)));
                         currentPlayer.makeMove(board, move);
@@ -57,6 +46,18 @@ public class King extends Piece {
                             possibleMoves.add(move);
                         }
                         currentPlayer.undoMove(board, move);
+                    } else {
+                        Piece enemy = board.getState()[tempRow][tempCol].getPiece();
+                        if (!getPieceColor().equals(enemy.getPieceColor())) {
+
+                            move = new Move(this, getCoordinates(),
+                                    new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)));
+                            currentPlayer.makeMove(board, move);
+                            if (!this.isAttacked(board)) {
+                                possibleMoves.add(move);
+                            }
+                            currentPlayer.undoMove(board, move);
+                        }
                     }
                 }
             }
@@ -70,7 +71,8 @@ public class King extends Piece {
         int currentCol = COLUMN_TO_INDEX.get(getCoordinates().getCol());
 
         return
-                attackedByBishopOrRookOrQueen(board, currentRow, currentCol) ||
+                attackedByRookOrQueen(board, currentRow, currentCol) ||
+                        attackedByBishopOrQueen(board, currentRow, currentCol) ||
                         attackedByPawn(board, currentRow, currentCol) ||
                         attackedByKnight(board, currentRow, currentCol) ||
                         attackedByKing(board, currentRow, currentCol);
@@ -84,11 +86,10 @@ public class King extends Piece {
             for (int j = -1; j <= 1; j++) {
                 tempRow = currentRow + i;
                 tempCol = currentCol + j;
-                if (!board.getState()[tempRow][tempCol].isEmpty()) {
+                if ((tempRow >= 0 && tempRow < 8 && tempCol >= 0 && tempCol < 8)
+                        && !board.getState()[tempRow][tempCol].isEmpty()) {
                     Piece enemy = board.getState()[tempRow][tempCol].getPiece();
-                    if (getPieceColor().equals(enemy.getPieceColor())) {
-                        break;
-                    } else {
+                    if (!getPieceColor().equals(enemy.getPieceColor())) {
                         PieceName pieceName = enemy.getName();
                         if (KING.equals(pieceName)) {
                             return true;
@@ -119,11 +120,10 @@ public class King extends Piece {
         for (int[] offset : offsets) {
             tempRow = currentRow + offset[0];
             tempCol = currentCol + offset[1];
-            if (!board.getState()[tempRow][tempCol].isEmpty()) {
+            if ((tempRow >= 0 && tempRow < 8 && tempCol >= 0 && tempCol < 8)
+                    && !board.getState()[tempRow][tempCol].isEmpty()) {
                 Piece enemy = board.getState()[tempRow][tempCol].getPiece();
-                if (getPieceColor().equals(enemy.getPieceColor())) {
-                    break;
-                } else {
+                if (!getPieceColor().equals(enemy.getPieceColor())) {
                     PieceName pieceName = enemy.getName();
                     if (KNIGHT.equals(pieceName)) {
                         return true;
@@ -142,11 +142,10 @@ public class King extends Piece {
         for (int i = -1; i <= 1; i += 2) {
             tempRow = currentRow - 1;
             tempCol = currentCol + i;
-            if (!board.getState()[tempRow][tempCol].isEmpty()) {
+            if ((tempRow >= 0 && tempRow < 8 && tempCol >= 0 && tempCol < 8)
+                    && !board.getState()[tempRow][tempCol].isEmpty()) {
                 Piece enemy = board.getState()[tempRow][tempCol].getPiece();
-                if (getPieceColor().equals(enemy.getPieceColor())) {
-                    break;
-                } else {
+                if (!getPieceColor().equals(enemy.getPieceColor())) {
                     PieceName pieceName = enemy.getName();
                     if (PAWN.equals(pieceName)) {
                         return true;
@@ -157,22 +156,65 @@ public class King extends Piece {
         return false;
     }
 
-    private boolean attackedByBishopOrRookOrQueen(Board board, int currentRow, int currentCol) {
+    private boolean attackedByRookOrQueen(Board board, int currentRow, int currentCol) {
         int tempRow;
         int tempCol;
 
         for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
+            tempRow = currentRow + i;
+            tempCol = currentCol;
+            while (tempRow >= 0 && tempRow < 8) {
+                if (!board.getState()[tempRow][tempCol].isEmpty()) {
+                    Piece enemy = board.getState()[tempRow][tempCol].getPiece();
+                    if (getPieceColor().equals(enemy.getPieceColor())) {
+                        break;
+                    } else {
+                        PieceName pieceName = enemy.getName();
+                        if (QUEEN.equals(pieceName) || ROOK.equals(pieceName)) {
+                            return true;
+                        }
+                    }
+                }
+                tempRow++;
+            }
+        }
+        for (int j = -1; j <= 1; j++) {
+            tempRow = currentRow;
+            tempCol = currentCol + j;
+            while (tempCol >= 0 && tempCol < 8) {
+                if (!board.getState()[tempRow][tempCol].isEmpty()) {
+                    Piece enemy = board.getState()[tempRow][tempCol].getPiece();
+                    if (getPieceColor().equals(enemy.getPieceColor())) {
+                        break;
+                    } else {
+                        PieceName pieceName = enemy.getName();
+                        if (QUEEN.equals(pieceName) || ROOK.equals(pieceName)) {
+                            return true;
+                        }
+                    }
+                }
+                tempCol++;
+            }
+        }
+        return false;
+    }
+
+    private boolean attackedByBishopOrQueen(Board board, int currentRow, int currentCol) {
+        int tempRow;
+        int tempCol;
+
+        for (int i = -1; i <= 1; i += 2) {
+            for (int j = -1; j <= 1; j += 2) {
                 tempRow = currentRow + i;
                 tempCol = currentCol + j;
-                while (tempRow >= 0 || tempRow < 8 || tempCol >= 0 || tempCol < 8) {
+                while (tempRow >= 0 && tempRow < 8 && tempCol >= 0 && tempCol < 8) {
                     if (!board.getState()[tempRow][tempCol].isEmpty()) {
                         Piece enemy = board.getState()[tempRow][tempCol].getPiece();
                         if (getPieceColor().equals(enemy.getPieceColor())) {
                             break;
                         } else {
                             PieceName pieceName = enemy.getName();
-                            if (BISHOP.equals(pieceName) || QUEEN.equals(pieceName) || ROOK.equals(pieceName)) {
+                            if (BISHOP.equals(pieceName) || QUEEN.equals(pieceName)) {
                                 return true;
                             }
                         }

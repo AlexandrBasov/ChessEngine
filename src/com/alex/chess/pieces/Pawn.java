@@ -7,7 +7,11 @@ import com.alex.chess.enums.Color;
 import com.alex.chess.enums.PieceName;
 import com.alex.chess.enums.UnicodeView;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.alex.chess.util.MapCoordinates.COLUMN_TO_INDEX;
+import static com.alex.chess.util.MapCoordinates.ROW_TO_INDEX;
 
 public class Pawn extends Piece{
 
@@ -25,7 +29,20 @@ public class Pawn extends Piece{
     }
     @Override
     public List<Move> getPossibleMoves(Board board, Player currentPlayer) {
-        return null;
+        List<Move> possibleMoves = new ArrayList<>();
+        Move move;
+        int currentRow = ROW_TO_INDEX.get(getCoordinates().getRow());
+        int currentCol = COLUMN_TO_INDEX.get(getCoordinates().getCol());
+        int tempRow;
+        int tempCol;
+
+        if(Color.WHITE.equals(getPieceColor())){
+
+        } else {
+
+        }
+
+        return possibleMoves;
     }
 
     public PieceName getName() {
