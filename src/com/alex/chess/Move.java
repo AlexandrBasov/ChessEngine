@@ -6,14 +6,25 @@ public class Move {
 
     private Piece piece;
 
+    private Piece taken;
+
     private Coord from;
 
     private Coord to;
 
-    public Move(Piece piece, Coord from, Coord to) {
+    public Move(Piece piece, Coord from, Coord to, Piece taken) {
         this.piece = piece;
         this.from = from;
         this.to = to;
+        this.taken = taken;
+    }
+
+    public Piece getTaken() {
+        return taken;
+    }
+
+    public void setTaken(Piece taken) {
+        this.taken = taken;
     }
 
     public Piece getPiece() {

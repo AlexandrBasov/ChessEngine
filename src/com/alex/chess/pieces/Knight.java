@@ -57,7 +57,7 @@ public class Knight extends Piece {
                 Cell cell = board.getState()[tempRow][tempCol];
                 if (cell.isEmpty()) {
                     move = new Move(this, getCoordinates(),
-                            new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)));
+                            new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)), null);
                     currentPlayer.makeMove(board, move);
                     if (!king.isAttacked(board)) {
                         possibleMoves.add(move);
@@ -67,7 +67,7 @@ public class Knight extends Piece {
                     Piece enemy = board.getState()[tempRow][tempCol].getPiece();
                     if (!getPieceColor().equals(enemy.getPieceColor())) {
                         move = new Move(this, getCoordinates(),
-                                new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)));
+                                new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)), enemy);
                         currentPlayer.makeMove(board, move);
                         if (!king.isAttacked(board)) {
                             possibleMoves.add(move);

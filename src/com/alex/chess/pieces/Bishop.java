@@ -46,7 +46,7 @@ public class Bishop extends Piece {
                     Cell cell = board.getState()[tempRow][tempCol];
                     if (cell.isEmpty()) {
                         move = new Move(this, getCoordinates(),
-                                new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)));
+                                new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)), null);
                         currentPlayer.makeMove(board, move);
                         if (!king.isAttacked(board)) {
                             possibleMoves.add(move);
@@ -58,7 +58,7 @@ public class Bishop extends Piece {
                             break;
                         } else {
                             move = new Move(this, getCoordinates(),
-                                    new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)));
+                                    new Coord(INDEX_TO_ROW.get(tempRow), INDEX_TO_COLUMN.get(tempCol)), enemy);
                             currentPlayer.makeMove(board, move);
                             if (!king.isAttacked(board)) {
                                 possibleMoves.add(move);
